@@ -30,7 +30,7 @@ export const Route = createFileRoute("/eligibility-checker")({
       },
     ],
   }),
-  component: EligibilityChecker;
+  component: EligibilityChecker,
 });
 
 const fields = [

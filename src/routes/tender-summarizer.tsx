@@ -236,8 +236,10 @@ function Result() {
     { icon: Hash, label: "Reference No.", value: t.referenceNo },
   ];
 
+  const scrollRef = useScrollIntoView();
+
   return (
-    <div ref={useScrollIntoView()} className="mt-6 scroll-mt-24 space-y-6">
+    <div ref={scrollRef} className="mt-6 scroll-mt-24 space-y-6">
       <Card>
         <CardContent className="p-6 sm:p-8">
           <div className="flex flex-wrap items-center justify-between gap-3">

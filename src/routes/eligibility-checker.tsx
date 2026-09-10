@@ -13,6 +13,7 @@ import {
   sampleCompany,
   sampleTender,
 } from "@/lib/tender-data";
+import { useScrollIntoView } from "@/lib/ui-helpers";
 
 export const Route = createFileRoute("/eligibility-checker")({
   head: () => ({
@@ -159,8 +160,10 @@ function ResultBlock() {
   const r = 54;
   const c = 2 * Math.PI * r;
 
+  const scrollRef = useScrollIntoView();
+
   return (
-    <div className="mt-6 space-y-6">
+    <div ref={scrollRef} className="mt-6 scroll-mt-24 space-y-6">
       <Card>
         <CardContent className="flex flex-col items-center gap-8 p-6 sm:flex-row sm:p-8">
           <div className="relative size-36 shrink-0">

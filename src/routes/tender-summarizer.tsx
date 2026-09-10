@@ -22,6 +22,7 @@ import { AppShell } from "@/components/AppShell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { sampleTender } from "@/lib/tender-data";
+import { formatSize, useScrollIntoView } from "@/lib/ui-helpers";
 
 export const Route = createFileRoute("/tender-summarizer")({
   head: () => ({
@@ -136,7 +137,7 @@ function TenderSummarizer() {
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium text-foreground">{file.name}</p>
                 <p className="text-xs text-muted-foreground">
-                  {(file.size / 1024 / 1024).toFixed(2)} MB · ready to analyze
+                  {formatSize(file.size)} · PDF · ready to analyze
                 </p>
               </div>
               <button
@@ -235,8 +236,10 @@ function Result() {
     { icon: Hash, label: "Reference No.", value: t.referenceNo },
   ];
 
+  const scrollRef = useScrollIntoView();
+
   return (
-    <div className="mt-6 space-y-6">
+    <div ref={scrollRef} className="mt-6 scroll-mt-24 space-y-6">
       <Card>
         <CardContent className="p-6 sm:p-8">
           <div className="flex flex-wrap items-center justify-between gap-3">

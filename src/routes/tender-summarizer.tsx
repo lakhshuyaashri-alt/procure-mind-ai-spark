@@ -136,7 +136,7 @@ function TenderSummarizer() {
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium text-foreground">{file.name}</p>
                 <p className="text-xs text-muted-foreground">
-                  {(file.size / 1024 / 1024).toFixed(2)} MB · ready to analyze
+                  {formatSize(file.size)} · PDF · ready to analyze
                 </p>
               </div>
               <button
@@ -236,7 +236,7 @@ function Result() {
   ];
 
   return (
-    <div className="mt-6 space-y-6">
+    <div ref={useScrollIntoView()} className="mt-6 scroll-mt-24 space-y-6">
       <Card>
         <CardContent className="p-6 sm:p-8">
           <div className="flex flex-wrap items-center justify-between gap-3">

@@ -22,6 +22,7 @@ import { AppShell } from "@/components/AppShell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { sampleTender } from "@/lib/tender-data";
+import { formatSize, useScrollIntoView } from "@/lib/ui-helpers";
 
 export const Route = createFileRoute("/tender-summarizer")({
   head: () => ({

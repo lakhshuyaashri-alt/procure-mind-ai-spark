@@ -39,7 +39,7 @@ Respond with ONLY valid JSON in exactly this shape:
 For important_dates use events such as: Tender Publication Date, Pre-Bid Meeting Date, Query Submission Deadline, Bid Submission Deadline, Technical Bid Opening, Financial Bid Opening. Use "Not specified" as source when no clause reference exists.`;
 
 async function callAI(messages: { role: string; content: string }[], json: boolean) {
-  const key = process.env.LOVABLE_API_KEY;
+  const key = process.env['LOVABLE_API_KEY'];
   if (!key) throw new Error("The analysis service is not configured.");
   const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
     method: "POST",

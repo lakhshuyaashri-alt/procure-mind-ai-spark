@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EligibilityCheckerRouteImport } from './routes/eligibility-checker'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as TenderAnalyzerRouteImport } from './routes/tender-analyzer'
 import { Route as TenderSummarizerRouteImport } from './routes/tender-summarizer'
 
 const IndexRoute = IndexRouteImport.update({
@@ -29,6 +30,11 @@ const HowItWorksRoute = HowItWorksRouteImport.update({
   path: '/how-it-works',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TenderAnalyzerRoute = TenderAnalyzerRouteImport.update({
+  id: '/tender-analyzer',
+  path: '/tender-analyzer',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TenderSummarizerRoute = TenderSummarizerRouteImport.update({
   id: '/tender-summarizer',
   path: '/tender-summarizer',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/eligibility-checker': typeof EligibilityCheckerRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/tender-analyzer': typeof TenderAnalyzerRoute
   '/tender-summarizer': typeof TenderSummarizerRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/eligibility-checker': typeof EligibilityCheckerRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/tender-analyzer': typeof TenderAnalyzerRoute
   '/tender-summarizer': typeof TenderSummarizerRoute
 }
 export interface FileRoutesById {
@@ -52,19 +60,30 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/eligibility-checker': typeof EligibilityCheckerRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/tender-analyzer': typeof TenderAnalyzerRoute
   '/tender-summarizer': typeof TenderSummarizerRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/eligibility-checker' | '/how-it-works' | '/tender-summarizer'
+    | '/'
+    | '/eligibility-checker'
+    | '/how-it-works'
+    | '/tender-analyzer'
+    | '/tender-summarizer'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/eligibility-checker' | '/how-it-works' | '/tender-summarizer'
+  to:
+    | '/'
+    | '/eligibility-checker'
+    | '/how-it-works'
+    | '/tender-analyzer'
+    | '/tender-summarizer'
   id:
     | '__root__'
     | '/'
     | '/eligibility-checker'
     | '/how-it-works'
+    | '/tender-analyzer'
     | '/tender-summarizer'
   fileRoutesById: FileRoutesById
 }
@@ -72,6 +91,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   EligibilityCheckerRoute: typeof EligibilityCheckerRoute
   HowItWorksRoute: typeof HowItWorksRoute
+  TenderAnalyzerRoute: typeof TenderAnalyzerRoute
   TenderSummarizerRoute: typeof TenderSummarizerRoute
 }
 
@@ -98,6 +118,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HowItWorksRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tender-analyzer': {
+      id: '/tender-analyzer'
+      path: '/tender-analyzer'
+      fullPath: '/tender-analyzer'
+      preLoaderRoute: typeof TenderAnalyzerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tender-summarizer': {
       id: '/tender-summarizer'
       path: '/tender-summarizer'
@@ -112,6 +139,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   EligibilityCheckerRoute: EligibilityCheckerRoute,
   HowItWorksRoute: HowItWorksRoute,
+  TenderAnalyzerRoute: TenderAnalyzerRoute,
   TenderSummarizerRoute: TenderSummarizerRoute,
 }
 export const routeTree = rootRouteImport

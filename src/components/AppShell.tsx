@@ -7,12 +7,14 @@ import {
   Menu,
   X,
   Sparkles,
+  ScanSearch,
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
 
 const nav = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard },
   { to: "/tender-summarizer", label: "Tender Summarizer", icon: FileText },
+  { to: "/tender-analyzer", label: "Tender Analyzer", icon: ScanSearch },
   { to: "/eligibility-checker", label: "Eligibility Checker", icon: ShieldCheck },
   { to: "/how-it-works", label: "How It Works", icon: Workflow },
 ] as const;

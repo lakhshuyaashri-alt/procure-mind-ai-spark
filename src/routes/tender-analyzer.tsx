@@ -1,9 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import {
   UploadCloud, FileText, Loader2, X, AlertTriangle, Building2, Hash, Tag, IndianRupee, Wallet,
   MapPin, Clock, CalendarDays, Square, ListChecks, MessageSquareText, Send, ScanSearch,
+  Download, ShieldCheck, Sparkles,
 } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { Card, CardContent } from "@/components/ui/card";
@@ -13,6 +14,10 @@ import { formatSize, useScrollIntoView } from "@/lib/ui-helpers";
 import { extractPdfText, MAX_PDF_BYTES } from "@/lib/pdf-extract";
 import { analyzeTender, askTender } from "@/lib/tender-analyzer.functions";
 import { DATE_EVENTS, type Req, type TenderAnalysis } from "@/lib/tender-analyzer.types";
+import { SAMPLE_TENDER_TEXT } from "@/lib/sample-tender-text";
+import {
+  buildSummaryText, deriveRequirements, downloadText, saveAnalyzedTender,
+} from "@/lib/analyzed-tender";
 
 export const Route = createFileRoute("/tender-analyzer")({
   head: () => ({
@@ -35,6 +40,7 @@ function TenderAnalyzer() {
   const [status, setStatus] = useState<string | null>(null);
   const [text, setText] = useState("");
   const [result, setResult] = useState<TenderAnalysis | null>(null);
+  const [sourceName, setSourceName] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
   const analyze = useServerFn(analyzeTender);
 
@@ -45,6 +51,14 @@ function TenderAnalyzer() {
     if (f.size === 0) return setError("This PDF file is empty.");
     if (f.size > MAX_PDF_BYTES) return setError("This PDF is too large. Please upload a file under 15 MB.");
     setError(null); setResult(null); setText(""); setFile(f);
+  };
+
+  const analyzeText = async (extracted: string, label: string) => {
+    setText(extracted);
+    setSourceName(label);
+    const res = await analyze({ data: { text: extracted } });
+    if (!res.ok) throw new Error(res.error);
+    setResult(res.analysis);
   };
 
   const run = async () => {
@@ -60,10 +74,19 @@ function TenderAnalyzer() {
       }
       if (extracted.replace(/\[Page \d+\]/g, "").trim().length < 100)
         throw new Error("No readable text found. This looks like a scanned PDF — please upload a text-based PDF.");
-      setText(extracted);
-      const res = await analyze({ data: { text: extracted } });
-      if (!res.ok) throw new Error(res.error);
-      setResult(res.analysis);
+      await analyzeText(extracted, file.name);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Analysis failed. Please try again.");
+    } finally {
+      setStatus(null);
+    }
+  };
+
+  const runSample = async () => {
+    setError(null); setResult(null); setFile(null);
+    try {
+      setStatus("Analyzing Tender...");
+      await analyzeText(SAMPLE_TENDER_TEXT, "Sample government tender");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Analysis failed. Please try again.");
     } finally {
@@ -91,9 +114,15 @@ function TenderAnalyzer() {
             </span>
             <p className="mt-4 text-sm font-medium text-foreground">Drag & drop your tender PDF here</p>
             <p className="mt-1 text-xs text-muted-foreground">PDF only · up to 15 MB</p>
-            <Button variant="outline" className="mt-5" onClick={() => inputRef.current?.click()} disabled={!!status}>
-              Browse File
-            </Button>
+            <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+              <Button variant="outline" onClick={() => inputRef.current?.click()} disabled={!!status}>
+                Browse File
+              </Button>
+              <Button variant="ghost" onClick={runSample} disabled={!!status}
+                className="text-primary hover:bg-accent">
+                <Sparkles className="size-4" /> Try Sample Government Tender
+              </Button>
+            </div>
             <input ref={inputRef} type="file" accept="application/pdf,.pdf" className="hidden"
               onChange={(e) => { accept(e.target.files?.[0]); e.target.value = ""; }} />
           </div>
